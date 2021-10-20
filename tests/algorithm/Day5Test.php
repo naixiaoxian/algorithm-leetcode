@@ -63,6 +63,8 @@ class Day5Test extends TestCase {
         return $slow;
     }
 
+    //给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。
+    //类似快慢节点的算法。然后在边界值的特殊情况进行特殊处理。
     public function testRemoveNthFromEnd () {
         $input = [1, 2];
         $node = $this->makeNodes($input);
