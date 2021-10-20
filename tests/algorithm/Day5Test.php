@@ -69,7 +69,9 @@ class Day5Test extends TestCase {
         $input = [1, 2];
         $node = $this->makeNodes($input);
         dd($this->removeNthFromEnd($node, 2));
+        str_contains();
     }
+
 
     /**
      * @param ListNode $head
