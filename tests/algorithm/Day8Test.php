@@ -74,43 +74,61 @@ class Day8Test extends TestCase {
 
 
     public function testOrinage () {
-
+        dump($this->orangesRotting([
+            [2, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+            [2, 0, 1, 0, 0, 0, 0, 0, 0, 1],
+            [2, 0, 1, 0, 1, 1, 1, 1, 0, 1],
+            [2, 0, 1, 0, 1, 0, 0, 1, 0, 1],
+            [2, 0, 1, 0, 1, 0, 0, 1, 0, 1],
+            [2, 0, 1, 0, 1, 1, 0, 1, 0, 1],
+            [2, 0, 1, 0, 0, 0, 0, 1, 0, 1],
+            [2, 0, 1, 1, 1, 1, 1, 1, 0, 1],
+            [2, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [2, 2, 2, 2, 2, 2, 2, 1, 1, 1],
+        ]));
     }
 
     function orangesRotting ($grid) {
-        $dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
-
-        $seen = $grid;
-        $dist = $grid;
-        $oneQueue = [];
-
-        for ($i = 0; $i < count($grid); $i++) {
-            for ($j = 0; $j < count($grid[0]); $j++) {
-                if ($grid[$i][$j] == 0) {
-                    $seen[$i][$j] = 1;
-                    array_push($oneQueue, [$i, $j]);
-                } else {
-                    $seen[$i][$j] = 0;
-                }
-                $dist[$i][$j] = 0;
-            }
-        }
-        while (count($oneQueue) > 0) {
-            $value = array_shift($oneQueue);
-            $selecti = $value[0];
-            $selectj = $value[1];
-            for ($d = 0; $d < 4; $d++) {
-                $ni = $selecti + $dirs[$d][0];
-                $nj = $selectj + $dirs[$d][1];
-                if ($ni >= 0 && $ni < count($mat) && $nj >= 0 && $nj < count($mat[0]) && !$seen[$ni][$nj]) {
-                    $dist[$ni][$nj] = $dist[$selecti][$selectj] + 1;
-                    array_push($oneQueue, [$ni, $nj]);
-                    $seen[$ni][$nj] = 1;
+        $dr = [-1, 0, 1, 0];
+        $dc = [0, -1, 0, 1];
+        $RL = count($grid);
+        $CL = count($grid[0]);
+        $queue = [];
+        $depMap = [];
+        for ($r = 0; $r < $RL; $r++) {
+            for ($c = 0; $c < $CL; $c++) {
+                if ($grid[$r][$c] == 2) {
+                    $code = $r * $CL + $c;
+                    array_push($queue, $code);
+                    $depMap[$code] = 0;
                 }
             }
         }
-
-        return $dist;
+        $ans = 0;
+        while (count($queue) > 0) {
+            $code = array_shift($queue);
+            $cr = (int)($code / $CL);
+            $cc = $code % $CL;
+            for ($k = 0; $k < 4; $k++) {
+                $nr = $cr + $dr[$k];
+                $nc = $cc + $dc[$k];
+                if (0 <= $nr && $nr < $RL && 0 <= $nc && $nc < $CL && $grid[$nr][$nc] == 1) {
+                    $grid[$nr][$nc] = 2;
+                    $nNode = $nr * $CL + $nc;
+                    array_push($queue, $nNode);
+                    $depMap[$nNode] = $depMap[$code] + 1;
+                    $ans = $depMap[$nNode];
+                }
+            }
+        }
+        for ($r = 0; $r < $RL; $r++) {
+            for ($c = 0; $c < $CL; $c++) {
+                if ($grid[$r][$c] == 1) {
+                    return -1;
+                }
+            }
+        }
+        return $ans;
     }
 
 
