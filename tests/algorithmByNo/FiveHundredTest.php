@@ -39,4 +39,45 @@ class FiveHundredTest extends TestCase {
     }
 
 
+    public function test496 () {
+        //496. 下一个更大元素 I
+        //给你两个 没有重复元素 的数组nums1 和nums2，其中nums1是nums2的子集。
+        //
+        //请你找出 nums1中每个元素在nums2中的下一个比其大的值。
+        //nums1中数字x的下一个更大元素是指x在nums2中对应位置的右边的第一个比x大的元素。如果不存在，对应位置输出 -1
+
+        dd($this->nextGreaterElement([4, 1, 2], [1, 3, 4, 2]));
+    }
+
+    /**
+     * @param Integer[] $nums1
+     * @param Integer[] $nums2
+     * @return Integer[]
+     */
+    function nextGreaterElement ($nums1, $nums2) {
+        $retArr = [];
+        for ($i = 0; $i < count($nums1); $i++) {
+            $curretNum = -1;
+            $startIndex = $this->findIndex($nums1[$i], $nums2);
+            for ($j = $startIndex + 1; $j < count($nums2); $j++) {
+                if ($nums2[$j] > $nums1[$i]) {
+                    $curretNum = $nums2[$j];
+                    break;
+                }
+            }
+            array_push($retArr, $curretNum);
+        }
+        return $retArr;
+    }
+
+    function findIndex ($value, array $nums2): int {
+        for ($i = 0; $i < count($nums2); $i++) {
+            if ($value == $nums2[$i]) {
+                return $i;
+            }
+        }
+        return -1;
+    }
+
+
 }
