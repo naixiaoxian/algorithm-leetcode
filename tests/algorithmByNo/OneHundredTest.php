@@ -1,20 +1,43 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\OneHundred;
 
 use phpDocumentor\Reflection\DocBlock\Tags\Param;
 use phpDocumentor\Reflection\Element;
 use phpDocumentor\Reflection\Types\True_;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use function MongoDB\Driver\Monitoring\removeSubscriber;
+
+
+class ListNode {
+    public $val = 0;
+    public $next = null;
+
+    function __construct ($val = 0, $next = null) {
+        $this->val = $val;
+        $this->next = $next;
+    }
+}
 
 class OneHundredTest extends TestCase {
     //leetcode刷题。从1-100题
-
+    public function makeNodes ($arr): ListNode {
+        $i = 0;
+        $node = new ListNode();
+        $selectNode = $node;
+        while ($i < count($arr)) {
+            $selectNode->val = $arr[$i];
+            if ($i + 1 < count($arr)) {
+                $selectNode->next = new ListNode();
+                $selectNode = $selectNode->next;
+            }
+            $i++;
+        }
+        return $node;
+    }
 
     public function test33 () {
-        dd($this->searchRange([3, 3, 3], 3));
+        dump($this->searchRange([3, 3, 3], 3));
     }
 
 
@@ -197,4 +220,80 @@ class OneHundredTest extends TestCase {
         return false;
     }
 
+    public function test82 () {
+        $ret = $this->makeNodes([1, 2, 3, 3, 3]);
+        //        dump($ret);
+        dump($this->deleteDuplicates2($ret));
+    }
+
+    //还是用golang写一遍吧
+    function deleteDuplicates (ListNode $head) {
+
+        $existHead = $head;
+
+        if ($head == null) {
+            return $head;
+        }
+        while ($head->next != null && $head->next->next != null) {
+            if ($head->next->val == $head->next->next->val) {
+                $x = $head->next->val;
+                while ($head->next != null && $head->next->val == $x) {
+                    $head->next = $head->next->next;
+                }
+            } else {
+                $head = $head->next;
+            }
+        }
+
+        return $existHead;
+    }
+
+    /**
+     * @param ListNode $head
+     * @return ListNode
+     */
+    function deleteDuplicates2 (ListNode $head) {
+        $existMap = [];//第一轮查询
+        //第二轮查询
+        $existHead = $head;
+        //第一遍查询
+        //去0
+        //
+        while ($head) {
+            dump($head);
+
+            if (isset($existMap[$head->val])) {
+                $existMap[$head->val] = 2;
+                $head = $head->next ?? null;
+            } else {
+                $existMap[$head->val] = 1;
+            }
+            if ($head) {
+                $head = $head->next;
+            }
+        }
+        dump(__LINE__);
+        dump($existMap);
+        dump($existHead);
+        dump(__LINE__);
+        //        $head = $existHead;
+        //        $parentHead = null;
+        //        while ($existHead) {
+        //            if ($existMap[$existHead->val] == 2) {
+        //                dump($existHead);
+        //                if (!isset($existHead->next)) {
+        //                    $parentHead->next = null;
+        //                } else {
+        //                    $existHead->val = $existHead->next->val;
+        //                    $existHead->next = $existHead->next->next;
+        //                }
+        //            }
+        //            $parentHead = $existHead = $existHead->next;
+        //        }
+        return $head;
+    }
+
+
 }
+
+

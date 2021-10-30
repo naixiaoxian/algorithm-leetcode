@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\FourHundred;
 
 use Hamcrest\Core\Set;
 use phpDocumentor\Reflection\DocBlock\Tags\Param;
@@ -64,53 +64,33 @@ class FourHundredTest extends TestCase {
         return $count == 0;
     }
 
-    //public List<String> removeInvalidParentheses(String s) {
-    //List<String> ans = new ArrayList<String>();
-    //Set<String> currSet = new HashSet<String>();
-    //
-    //currSet.add(s);
-    //while (true) {
-    //for (String str : currSet) {
-    //if (isValid(str)) {
-    //ans.add(str);
-    //}
-    //}
-    //if (ans.size() > 0) {
-    //    return ans;
-    //}
-    //Set<String> nextSet = new HashSet<String>();
-    //            for (String str : currSet) {
-    //                for (int i = 0; i < str.length(); i ++) {
-    //                    if (i > 0 && str.charAt(i) == str.charAt(i - 1)) {
-    //                        continue;
-    //                    }
-    //                    if (str.charAt(i) == '(' || str.charAt(i) == ')') {
-    //                        nextSet.add(str.substring(0, i) + str.substring(i + 1));
-    //                    }
-    //                }
-    //            }
-    //            currSet = nextSet;
-    //        }
-    //    }
-    //
-    //    private boolean isValid(String str) {
-    //                    char[] ss = str.toCharArray();
-    //        int count = 0;
-    //
-    //        for (char c : ss) {
-    //            if (c == '(') {
-    //                count++;
-    //            } else if (c == ')') {
-    //                count--;
-    //                if (count < 0) {
-    //                    return false;
-    //                }
-    //            }
-    //        }
-    //
-    //        return count == 0;
-    //    }
+    public function test335 () {
+        dump($this->isSelfCrossing([1, 2, 3, 4]));
+    }
 
+
+    /**
+     * @param Integer[] $distance
+     * @return Boolean
+     */
+    function isSelfCrossing ($distance) {
+        $count = count($distance);
+        for ($i = 3; $i < $count; $i++) {
+            if ($distance[$i] >= $distance[$i - 2] && $distance[$i - 1] <= $distance[$i - 3]) {
+                return true;
+            }
+            if ($i == 4 && ($distance[3] == $distance[1] && $distance[4] >= $distance[2] - $distance[0])) {
+                return true;
+            }
+            if ($i >= 5 && ($distance[$i - 3] - $distance[$i - 5] <= $distance[$i - 1]
+                    && $distance[$i - 1] <= $distance[$i - 3]
+                    && $distance[$i] >= $distance[$i - 2] - $distance[$i - 4]
+                    && $distance[$i - 2] > $distance[$i - 4])) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * @param Integer $area
@@ -127,8 +107,7 @@ class FourHundredTest extends TestCase {
     }
 
 
-    public
-    function test496 () {
+    public function test496 () {
         //496. 下一个更大元素 I
         //给你两个 没有重复元素 的数组nums1 和nums2，其中nums1是nums2的子集。
         //
