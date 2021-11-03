@@ -8,7 +8,6 @@ import "fmt"
 //路径中所有相邻的单元格应当在 8 个方向之一 上连通（即，相邻两单元之间彼此不同且共享一条边或者一个角）。
 //不该用dfs 而是用bfs来做
 
-
 //qa 1 为什么 用深搜解决不了
 //2 为什么广搜可以
 //3 是不是深搜是我这边的问题导致的？
@@ -22,39 +21,35 @@ func main() {
 	fmt.Println(shortestPathBinaryMatrix(grid))
 }
 
-
-
 func shortestPathBinaryMatrix(grid [][]int) int {
 	//bfs method
-	rows := len(grid)
-	if grid == nil || rows == 0 || grid[0][0] == 1 || grid[rows-1][rows-1] == 1 {
+	row := len(grid)
+	if grid == nil || row == 0 || grid[0][0] == 1 || grid[row-1][row-1] == 1 {
 		return -1
 	}
-	if len(grid) == 1 && grid[0][0] == 0 {
+	if row == 1 && grid[0][0] == 0 {
 		return 1
 	}
 	direction := []int{-1, 0, 1}
-	grid[0][0] = 1
-	//途经的每一个点都记录从起点到次的长度
+	grid[0][0] = 1 //每个点记录起点到这里的长度
 	que := make([]int, 0)
 	que = append(que, 0)
-	//用que记录当前点的坐标，判断有没有下一个节点
-
 	var x, y, nx, ny int
-
 	for len(que) > 0 {
-		x, y = que[0]/rows, que[0]%rows
+		x, y = que[0]/row, que[0]%row
 		que = que[1:]
+		//取第一个点。然后剔除
 		for _, i := range direction {
 			for _, j := range direction {
-				if i == j && i == 0 {
+				if i == j && j == 0 {
+					//自身点
 					continue
 				}
 				nx, ny = x+i, y+j
-				if nx < rows && ny < rows && nx >= 0 && ny >= 0 && grid[nx][ny] == 0 {
-					que = append(que, nx*rows+ny)
+				if nx < row && ny < row && nx >= 0 && ny >= 0 && grid[nx][ny] == 0 {
+					que = append(que, nx*row+ny)
 					grid[nx][ny] = grid[x][y] + 1
-					if nx == rows-1 && ny == rows-1 {
+					if nx == row-1 && ny == row-1 {
 						return grid[nx][ny]
 					}
 				}
@@ -63,8 +58,6 @@ func shortestPathBinaryMatrix(grid [][]int) int {
 	}
 	return -1
 }
-
-
 
 //
 //
