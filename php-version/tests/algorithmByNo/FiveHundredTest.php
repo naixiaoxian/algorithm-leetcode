@@ -79,5 +79,195 @@ class FiveHundredTest extends TestCase {
         return -1;
     }
 
+    function permute2 (array $list) {
+        $first = array_shift($list);
+        if (is_array($list) && count($list) > 0) {
+            $arrSub = $this->permute2($list);
+            $arrNew = [];
+            foreach ($arrSub as $arrS) {
+                $count = count($arrS);
+                for ($i = 0; $i <= $count; $i++) {
+                    $arrTmp = array_merge(array_slice($arrS, 0, $i), [$first], array_slice($arrS, $i));
+                    if (!in_array($arrTmp, $arrNew)) {
+                        $arrNew[] = $arrTmp;
+                        //todo 拿$arrTmp执行一个方法
+                    }
+                }
+            }
+            return $arrNew;
+        } else {
+            //todo 拿$first执行一个方法
+            return [[$first]];
+        }
+    }
+
+
+    function testPerMute () {
+        dump(__LINE__."--".time());
+        $this->permute7([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+        dump(__LINE__."--".time());
+        //        $this->permute([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+        //        dump(__LINE__."--".time());
+        //        $this->permute3([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+        //        dump(__LINE__."--".time());
+        //        $this->permute4([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+        //        dump(__LINE__."--".time());
+        //        $this->permute5([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+        //        dump(__LINE__."--".time());
+        //        $this->permute6([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+        //        dump(__LINE__."--".time());
+
+    }
+
+
+    function permute ($nums) {
+        $this->backtracking($nums, []);
+        return $this->res;
+    }
+
+    function backtracking ($nums, $arr) {
+        if (count($arr) == count($nums)) {
+            $this->res[] = $arr;
+            return;
+        }
+
+        foreach ($nums as $value) {
+            if (!in_array($value, $arr)) {
+                $arr[] = $value;
+                $this->backtracking($nums, $arr);
+                array_pop($arr);
+            }
+        }
+    }
+
+    function permute3 ($nums) {
+        $this->trackback3($nums, []);
+        return $this->res;
+    }
+
+    function trackback3 ($nums, $trace) {
+        $numsLen = sizeof($nums);
+        if ($numsLen == sizeof($trace)) {
+            $this->res[] = $trace;
+            return;
+        }
+
+        for ($i = 0; $i < $numsLen; $i++) {
+            if (array_search($nums[$i], $trace) !== false) {//判断是否重复
+                continue;
+            }
+
+            $trace[] = $nums[$i];//选择
+            $this->trackback3($nums, $trace);
+            array_pop($trace);//撤销选择
+        }
+    }
+
+    function permute4 ($nums) {
+        $allList = [];
+        $this->backtrack4(0, count($nums), $nums, $allList);
+        return $allList;
+    }
+
+    function backtrack4 ($start, $count, $nums, &$allList) {
+        if ($start == $count) {
+            $allList[] = $nums;
+        } else {
+            for ($i = $start; $i < $count; $i++) {
+                $this->swap($nums, $start, $i);
+                $this->backtrack4($start + 1, $count, $nums, $allList);
+                $this->swap($nums, $start, $i);
+            }
+        }
+    }
+
+    function swap (&$arr, $i, $j) {
+        $temp = $arr[$i];
+        $arr[$i] = $arr[$j];
+        $arr[$j] = $temp;
+    }
+
+    /**
+     * @param Integer[] $nums
+     * @return Integer[][]
+     */
+    function permute5 ($nums) {
+        $allList = [];
+        $this->backtrack5(0, count($nums), $nums, $allList);
+        return $allList;
+    }
+
+    function backtrack5 ($start, $count, $nums, &$allList) {
+        if ($start == $count) {
+            $allList[] = $nums;
+        } else {
+            for ($i = $start; $i < $count; $i++) {
+                $this->swap($nums, $start, $i);
+                $this->backtrack5($start + 1, $count, $nums, $allList);
+                $this->swap($nums, $start, $i);
+            }
+        }
+    }
+
+
+    function permute6 ($nums) {
+        return $this->recall($nums, []);
+    }
+
+    function recall ($nums, $ignoreKeys) {
+        $res = [];
+        $availableLen = count($nums) - count($ignoreKeys);
+
+        foreach ($nums as $key => $val) {
+            if (isset($ignoreKeys[$val])) {
+                continue;
+            }
+
+            if ($availableLen === 1) {  // 跳出递归
+                return [[$val]];
+            }
+
+            $ignoreKeys[$val] = true;
+            $childRes = $this->recall($nums, $ignoreKeys);  // DFS
+            unset($ignoreKeys[$val]);  // 回溯
+
+            foreach ($childRes as $v) {
+                $res[] = array_merge([$val], $v);
+            }
+        }
+
+        return $res;
+    }
+
+    public $total = [];
+
+    public $ret = [];
+    public $path = [];
+
+    function permute7 ($nums) {
+        $used = [];
+        $this->permuteDFS(0, $nums, $used);
+        return $this->ret;
+    }
+
+    function permuteDFS ($k = 0, $nums, $used) {
+        //        dump(__LINE__."--dfs "."k=".$k." path=".json_encode($this->path));
+        if (count($nums) == $k) {
+            array_push($this->ret, $this->path);
+            return;
+        }
+
+        //$tempNums = $nums;
+        for ($i = 0; $i < count($nums); $i++) {
+            if (!isset($used[$nums[$i]])) {
+                array_unshift($this->path, $nums[$i]);
+                $used[$nums[$i]] = 1;
+                $this->permuteDFS($k + 1, $nums, $used);
+                array_shift($this->path);
+                unset($used[$nums[$i]]);
+            }
+        }
+    }
+
 
 }

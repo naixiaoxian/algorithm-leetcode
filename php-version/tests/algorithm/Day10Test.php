@@ -106,7 +106,7 @@ class Day10Test extends TestCase {
             $this->curretArr[$i][$index] = strtolower($letter);
             $this->curretArr[floor(count($this->curretArr) / 2) + $i][$index] = strtoupper($letter);
         }
-        //        dump($this->curretArr);
+        //dump($this->curretArr);
     }
 
     function updateArr ($number, $index) {
@@ -114,6 +114,9 @@ class Day10Test extends TestCase {
             $this->curretArr[$i][$index] = $number;
         }
     }
+
+
+
 
 
 }
