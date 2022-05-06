@@ -71,7 +71,7 @@ func flatten(root *TreeNode)  {
 			helper2(node.Right)
 		}
 	}
-	helper2(root)
+		helper2(root)
 	//utils.PrintTree(root)
 }
 

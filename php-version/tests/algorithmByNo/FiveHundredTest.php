@@ -181,11 +181,6 @@ class FiveHundredTest extends TestCase {
         }
     }
 
-    function swap (&$arr, $i, $j) {
-        $temp = $arr[$i];
-        $arr[$i] = $arr[$j];
-        $arr[$j] = $temp;
-    }
 
     /**
      * @param Integer[] $nums
@@ -269,5 +264,181 @@ class FiveHundredTest extends TestCase {
         }
     }
 
+    function testFunc () {
+        $start_date = "1970-01-01";
+        $end_date = "2017-03-21";
+        $start_time = strtotime($start_date);
+        $end_time = strtotime($end_date);
+        $days = abs(($start_time - $end_time) / 86400) % 7;
+        //        dump($days);
+        $arr = ['四', '五', '六', '天', '一', '二', '三'];
+        echo '2017年3月21日是星期'.$arr[$days];
+    }
+
+    function testFunc2 () {
+        $score = [
+            1 => '极不满意',
+            2 => '不满意',
+            3 => '一般',
+            4 => '满意',
+            5 => '极满意',
+        ];
+
+        $project = [
+            '项目1' => 4,
+            '项目2' => 5,
+            '项目3' => 3,
+            '项目4' => 2,
+            '项目5' => 1,
+        ];
+        dump("项目 成绩");
+        foreach ($project as $key => $value) {
+            dump("$key ".$score[$value]);
+        }
+    }
+
+    function testFunc3 () {
+        $str = 'get name';
+        $str = str_replace(" ", "", $str);
+        $str = str_replace("g", "G", $str);
+        $str = str_replace("n", "N", $str);
+        dump($str);
+    }
+
+    //请使用PHP代码，打印出所有的"水仙花数"（"水仙花数"是指一个三位数，其各位数字立方和等于该数本身。例如：153是一个"水仙花数"，因为153=1的三次方＋5的三次方＋3的三次方。） 。
+    function testFunc4 () {
+        $this->testFlower(153);
+        $this->testFlower(153);
+        $this->testFlower(370);
+        $this->testFlower(371);
+        $this->testFlower(407);
+        $this->testFlower(406);
+    }
+
+    function testFlower ($nums) {
+        $num1 = $nums % 10;
+        $num2 = floor(($nums % 100) / 10);
+        $num3 = floor($nums / 100);
+        if (($num1 * $num1 * $num1 + $num2 * $num2 * $num2 + $num3 * $num3 * $num3) == $nums) {
+            echo $nums;
+        }
+    }
+
+    function testDate2 () {
+        $this->testDate("2018-3-23");
+    }
+
+    function testDate ($date) {
+        $time = strtotime($date);
+        $date = date('Y-m-t', strtotime('-1 month', $time));
+        echo $date;
+        echo "<br/>";
+    }
+
+    function get_last_month_last_day ($date = '') {
+        $time = strtotime($date);
+        $date = date('Y-m-t', strtotime('-1 month', $time));
+        echo $date;
+        echo "<br/>";
+    }
+
+    function testabc () {
+        $array = [
+            1 => [
+                'name'   => '张三',
+                'phone'  => '13112345678',
+                'sex'    => 1,   //男
+                'email'  => '123@163.com',
+                'status' => 2    //审核通过
+            ],
+            2 => [
+                'name'   => '李四',
+                'phone'  => '16812345678',
+                'sex'    => 2,   //女
+                'email'  => '',
+                'status' => 3    //审核拒绝
+            ],
+            3 => [
+                'name'   => '王五',
+                'phone'  => '',
+                'sex'    => 1,   //男
+                'email'  => '536@131.com',
+                'status' => 1    //待审核
+            ],
+        ];
+
+        $array_sex = [
+            1 => '男',
+            2 => '女',
+        ];
+        $array_status = [
+            1 => '待审核',
+            2 => '审核通过',
+            3 => '审核拒绝',
+        ];
+
+        //在下面补写代码
+        echo '<table>';
+        echo '<tr>';
+        echo '<th>姓名</th>';
+        echo '<th>电话</th>';
+        echo '<th>性别</th>';
+        echo '<th>邮箱</th>';
+        echo '<th>状态</th>';
+        echo '</tr>';
+        foreach ($array as $value) {
+            echo '<tr>';
+            echo '<th>'.$value['name'].'</th>';
+            echo '<th > ';
+            if (empty([$value['phone']])) {
+                echo $value['phone'];
+            } else {
+                echo "无";
+            }
+            echo ' </th> ';
+            echo '<th>'.$value['sex'].'</th> ';
+            echo '<th > ';
+            if (empty($value['email'])) {
+                echo $value['email'];
+            } else {
+                echo "无";
+            }
+            echo ' </th> ';
+            echo '<th > '.$array_status[$value['status']].' </th > ';
+            echo '</tr > ';
+        }
+        echo '</table > ';
+    }
+    //某企业发放的奖金根据利润提成。利润(I)低于或等于10万元时，奖金可提10%；
+    //利润高于10万元低于20万元时，低于10万元的部分提成10%，高于10万元的部分提成7%...（具体关系如图所示）
+    //。请根据关系表写出奖金计算方法reward()，并利用reward()方法计算当利润(I)=708000元时，应发放奖金总数为多少？
+    function testNUm () {
+        $num =;
+
+    }
+
+    function reward ($profit) {
+        $reward = 0;
+        if ($profit < 100000) {
+            $reward += 100000 * 0.1;
+        }
+        if ($profit > 100000) {
+            $reward += ($profit - 100000) * 0.07;
+        }
+        if ($profit > 200000) {
+            $reward += ($profit - 100000) * 0.07;
+        }
+        if ($profit > 400000) {
+            $reward += ($profit - 500000) * 0.05;
+        }
+        if ($profit > 600000) {
+            $reward += ($profit - 200000) * 0.05;
+        }
+        if ($profit > 100000) {
+            $reward += 100000 * 0.1;
+        }
+
+
+    }
 
 }
