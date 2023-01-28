@@ -9,3 +9,7 @@ build/
 /.vagrant
 .env
 .phpunit.result.cache
+
+/java-version/.idea
+/java-version/target
+/java-version/src/test
